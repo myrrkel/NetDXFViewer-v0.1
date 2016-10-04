@@ -1,0 +1,8 @@
+C:\Users\Michel\Documents\SharpDevelop Projects\NetDXFViewer\LibDXFViewer\bin\Debug\LibDXFViewer.dll
+C:\Users\Michel\Documents\SharpDevelop Projects\NetDXFViewer\LibDXFViewer\bin\Debug\LibDXFViewer.pdb
+C:\Users\Michel\Documents\SharpDevelop Projects\NetDXFViewer\LibDXFViewer\obj\Debug\LibDXFViewer.csprojResolveAssemblyReference.cache
+C:\Users\Michel\Documents\SharpDevelop Projects\NetDXFViewer\LibDXFViewer\obj\Debug\LibDXFViewer.dll
+C:\Users\Michel\Documents\SharpDevelop Projects\NetDXFViewer\LibDXFViewer\obj\Debug\LibDXFViewer.pdb
+C:\Users\Michel\Documents\SharpDevelop Projects\NetDXFViewer\LibDXFViewer\bin\Debug\netDxf.dll
+C:\Users\Michel\Documents\SharpDevelop Projects\NetDXFViewer\LibDXFViewer\bin\Debug\netDxf.pdb
+C:\Users\Michel\Documents\SharpDevelop Projects\NetDXFViewer\LibDXFViewer\bin\Debug\netDxf.xml

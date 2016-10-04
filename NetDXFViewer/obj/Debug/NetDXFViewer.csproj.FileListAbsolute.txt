@@ -1,0 +1,16 @@
+C:\Users\Michel\Documents\SharpDevelop Projects\NetDXFViewer\NetDXFViewer\bin\Debug\NetDXFViewer.exe.config
+C:\Users\Michel\Documents\SharpDevelop Projects\NetDXFViewer\NetDXFViewer\bin\Debug\NetDXFViewer.exe
+C:\Users\Michel\Documents\SharpDevelop Projects\NetDXFViewer\NetDXFViewer\bin\Debug\NetDXFViewer.pdb
+C:\Users\Michel\Documents\SharpDevelop Projects\NetDXFViewer\NetDXFViewer\bin\Debug\netDxf.dll
+C:\Users\Michel\Documents\SharpDevelop Projects\NetDXFViewer\NetDXFViewer\bin\Debug\netDxf.pdb
+C:\Users\Michel\Documents\SharpDevelop Projects\NetDXFViewer\NetDXFViewer\obj\Debug\NetDXFViewer.csprojResolveAssemblyReference.cache
+C:\Users\Michel\Documents\SharpDevelop Projects\NetDXFViewer\NetDXFViewer\obj\Debug\Window1.g.cs
+C:\Users\Michel\Documents\SharpDevelop Projects\NetDXFViewer\NetDXFViewer\obj\Debug\App.g.cs
+C:\Users\Michel\Documents\SharpDevelop Projects\NetDXFViewer\NetDXFViewer\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Users\Michel\Documents\SharpDevelop Projects\NetDXFViewer\NetDXFViewer\obj\Debug\NetDXFViewer_MarkupCompile.cache
+C:\Users\Michel\Documents\SharpDevelop Projects\NetDXFViewer\NetDXFViewer\obj\Debug\NetDXFViewer_MarkupCompile.lref
+C:\Users\Michel\Documents\SharpDevelop Projects\NetDXFViewer\NetDXFViewer\obj\Debug\Window1.baml
+C:\Users\Michel\Documents\SharpDevelop Projects\NetDXFViewer\NetDXFViewer\obj\Debug\NetDXFViewer.g.resources
+C:\Users\Michel\Documents\SharpDevelop Projects\NetDXFViewer\NetDXFViewer\obj\Debug\NetDXFViewer.exe
+C:\Users\Michel\Documents\SharpDevelop Projects\NetDXFViewer\NetDXFViewer\obj\Debug\NetDXFViewer.pdb
+C:\Users\Michel\Documents\SharpDevelop Projects\NetDXFViewer\NetDXFViewer\bin\Debug\netDxf.xml
