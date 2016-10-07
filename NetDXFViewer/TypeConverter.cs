@@ -104,6 +104,7 @@ namespace NetDXFViewer
 		
 		public static System.Windows.Point Vertex3ToPoint(Vector3 V3,double CanvasHeight)
 		{
+			DrawEntities.getMaxPt(V3);
 			System.Windows.Point newPoint = new System.Windows.Point();
 			newPoint.X=V3.X;
 			newPoint.Y=CanvasHeight-V3.Y;
@@ -120,6 +121,7 @@ namespace NetDXFViewer
 		
 		public static System.Windows.Point Vertex2ToPoint(Vector2 V2,double CanvasHeight)
 		{
+			DrawEntities.getMaxPt(V2);
 			System.Windows.Point newPoint = new System.Windows.Point();
 			newPoint.X=V2.X;
 			newPoint.Y=CanvasHeight-V2.Y;

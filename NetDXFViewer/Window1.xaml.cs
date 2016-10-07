@@ -66,14 +66,14 @@ namespace NetDXFViewer
 			openBtn.Click += btnOpenFile_Click;
 			stack.Children.Add(openBtn);
 			
-			Button LineWeightBtn = new Button();
-			LineWeightBtn.Width=100;
-			LineWeightBtn.VerticalAlignment=VerticalAlignment.Top;
-			LineWeightBtn.HorizontalAlignment=HorizontalAlignment.Left;
-			LineWeightBtn.Content = "LineWeight";
-			LineWeightBtn.Click += LineWeigh_Click;
+			Button ZoomAutoBtn = new Button();
+			ZoomAutoBtn.Width=100;
+			ZoomAutoBtn.VerticalAlignment=VerticalAlignment.Top;
+			ZoomAutoBtn.HorizontalAlignment=HorizontalAlignment.Left;
+			ZoomAutoBtn.Content = "ZoomAuto";
+			ZoomAutoBtn.Click += ZoomAuto_Click;
 			
-			stack.Children.Add(LineWeightBtn);
+			stack.Children.Add(ZoomAutoBtn);
 			
 			
 			myDXF.mainGrid.Children.Add(stack);
@@ -85,17 +85,17 @@ namespace NetDXFViewer
 		
 		
 		
-		private void LineWeigh_Click(object sender, RoutedEventArgs e)
+		private void ZoomAuto_Click(object sender, RoutedEventArgs e)
 		{
 			
 			
-			myDXF.border.Reset(10,10);
+			myDXF.border.Reset(5000,5000,(myDXF.DxfDoc.DrawingVariables.AcadVer < netDxf.Header.DxfVersion.AutoCad2000));
 		}
 		
 		
 		private void ResetButton_Click(object sender, RoutedEventArgs e)
 		{
-			IMGutil.SaveCanvas(this,myDXF.mainCanvas,96,@"c:\temp\logo.png");
+			//IMGutil.SaveCanvas(this,myDXF.mainCanvas,96,@"c:\temp\logo.png");
 			
 			myDXF.border.Reset();
 		}
@@ -125,29 +125,60 @@ namespace NetDXFViewer
 			
 			TypeConverter.defaultThickness = 0.01;
 			
-			netDxf.Entities.Line ligneTmp = new netDxf.Entities.Line();
 			
-			ligneTmp.StartPoint = new Vector3(0,0,0);
-			ligneTmp.EndPoint = new Vector3(100,100,0);
-
 			myDXF.DxfDoc = new DxfDocument();
-			myDXF.DxfDoc.AddEntity(ligneTmp);
-			
-			if(fileDXF=="") fileDXF="tracery20.dxf";
+
+			/*
+			if(fileDXF=="") fileDXF="vulture.dxf";
 			netDxf.Blocks.Block myBlock = netDxf.Blocks.Block.Load(fileDXF);
 			netDxf.Entities.Insert myInsert = new netDxf.Entities.Insert(myBlock);
 			
 			myDXF.DxfDoc.AddEntity(myInsert);
 			
-			/*netDxf.Entities.Insert myInsert2 = new netDxf.Entities.Insert(myBlock);
-			myInsert2.Rotation = 180;
-			Vector3 pos= new Vector3(myInsert2.Position.X+40,myInsert2.Position.Y,0);
+			netDxf.Entities.Insert myInsert2 = new netDxf.Entities.Insert(myBlock);
+
+			Vector3 scaleInsert = new Vector3(1,-1,1);
+			myInsert2.Scale = scaleInsert;
+			Vector3 pos= new Vector3(myInsert2.Position.X+5,myInsert2.Position.Y,0);
 			myInsert2.Position = pos;
-			myDXF.DxfDoc.AddEntity(myInsert2);*/
+			myDXF.DxfDoc.AddEntity(myInsert2);
+			*/
+			
+			if(fileDXF=="") fileDXF="swan.dxf";
+			this.Content = myDXF.GetMainGrid(fileDXF,true,true);
+
+		}
+		
+		private void DrawDXFInsert(string fileDXF)
+		{
+			
+			TypeConverter.defaultThickness = 0.01;
+			DrawEntities.RazMaxDim();
+			/*netDxf.Entities.Line ligneTmp = new netDxf.Entities.Line();
+			
+			ligneTmp.StartPoint = new Vector3(0,0,0);
+			ligneTmp.EndPoint = new Vector3(100,100,0);*/
+
+			myDXF.DxfDoc = new DxfDocument();
+			//myDXF.DxfDoc.AddEntity(ligneTmp);
+			
+			if(fileDXF=="") fileDXF="vulture.dxf";
+			netDxf.Blocks.Block myBlock = netDxf.Blocks.Block.Load(fileDXF);
+			netDxf.Entities.Insert myInsert = new netDxf.Entities.Insert(myBlock);
+			
+			myDXF.DxfDoc.AddEntity(myInsert);
+			
+			netDxf.Entities.Insert myInsert2 = new netDxf.Entities.Insert(myBlock);
+			//myInsert2.Rotation = 180;
+			Vector3 scaleInsert = new Vector3(1,-1,1);
+			myInsert2.Scale = scaleInsert;
+			Vector3 pos= new Vector3(myInsert2.Position.X+5,myInsert2.Position.Y,0);
+			myInsert2.Position = pos;
+			myDXF.DxfDoc.AddEntity(myInsert2);
 			
 			
 			
-			this.Content = myDXF.GetMainGrid(myDXF.DxfDoc);
+			this.Content = myDXF.GetMainGrid(myDXF.DxfDoc,true,true);
 
 		}
 		

@@ -21,12 +21,20 @@ namespace NetDXFViewer
 	/// <summary>
 	/// Description of TypeConverter.
 	/// </summary>
+	/// 
+	public class DimMax
+	{
+		public  double minX=double.MaxValue;
+		public  double minY=double.MaxValue;
+		public  double maxX=double.MinValue;
+		public  double maxY=double.MinValue;
+	}
+	
 	public class DrawEntities
 	{
-		static double minX=0;
-		static double minY=0;
-		static double maxX=0;
-		static double maxY=0;
+
+		public static List<DimMax> listDim = new List<DimMax>();
+		public static DimMax dimDoc = new DimMax();
 		
 		public DrawEntities()
 		{
@@ -56,6 +64,7 @@ namespace NetDXFViewer
 
 			foreach (netDxf.Entities.PolylineVertex xVertex in xPoly.Vertexes) {
 				System.Windows.Point myPt = TypeConverter.Vertex3ToPoint(xVertex.Position);
+				getMaxPt(myPt);
 				myPt.Y = mainCanvas.Height - myPt.Y;
 				wPoly.Points.Add(myPt);
 			}
@@ -147,7 +156,7 @@ namespace NetDXFViewer
 
 			foreach (netDxf.Entities.PolyfaceMeshVertex xVertex in xPoly.Vertexes) {
 				System.Windows.Point myPt = TypeConverter.Vertex3ToPoint(xVertex.Location);
-				/*DrawUtils.DrawPoint(xVertex.Location, mainCanvas, Colors.Red, 10, 0);*/
+				getMaxPt(myPt);
 				myPt.Y = mainCanvas.Height - myPt.Y;
 				wPoly.Points.Add(myPt);
 			}
@@ -163,6 +172,7 @@ namespace NetDXFViewer
 
 			foreach (netDxf.Vector2 xVertex in xPoly.ClippingBoundary.Vertexes) {
 				System.Windows.Point myPt = TypeConverter.Vertex2ToPoint(xVertex);
+				getMaxPt(myPt);
 				myPt.Y = mainCanvas.Height - myPt.Y;
 				wPoly.Points.Add(myPt);
 			}
@@ -191,6 +201,8 @@ namespace NetDXFViewer
 			System.Windows.Shapes.Ellipse wCircle = new System.Windows.Shapes.Ellipse();
 			wCircle.Width = xCircle.Radius * 2;
 			wCircle.Height = xCircle.Radius * 2;
+			getMaxPt(xCircle.Center.X+xCircle.Radius,xCircle.Center.Y+xCircle.Radius);
+			getMaxPt(xCircle.Center.X-xCircle.Radius,xCircle.Center.Y-xCircle.Radius);
 			Canvas.SetLeft(wCircle, xCircle.Center.X - xCircle.Radius);
 			Canvas.SetTop(wCircle, mainCanvas.Height - (xCircle.Center.Y + xCircle.Radius));
 			TypeConverter.Entity2Shape(xCircle, wCircle);
@@ -204,6 +216,8 @@ namespace NetDXFViewer
 			System.Windows.Shapes.Ellipse wEllipse = new System.Windows.Shapes.Ellipse();
 			wEllipse.Width = xEllipse.MajorAxis;
 			wEllipse.Height = xEllipse.MinorAxis;
+			getMaxPt(xEllipse.Center.X+xEllipse.MajorAxis / 2,xEllipse.Center.Y+xEllipse.MinorAxis / 2);
+			getMaxPt(xEllipse.Center.X-xEllipse.MajorAxis / 2,xEllipse.Center.Y-xEllipse.MinorAxis / 2);
 			Canvas.SetLeft(wEllipse, xEllipse.Center.X - xEllipse.MajorAxis / 2);
 			Canvas.SetTop(wEllipse, mainCanvas.Height - (xEllipse.Center.Y + xEllipse.MinorAxis / 2));
 			TypeConverter.Entity2Shape(xEllipse, wEllipse);
@@ -378,6 +392,7 @@ namespace NetDXFViewer
 			double size = 15.0;
 			AciColor myColor = xPoint.getColor();
 			Canvas canvas1 = DrawUtils.GetPoint(TypeConverter.ToMediaColor(myColor.ToColor()), size, 0);
+			getMaxPt(xPoint.Position);
 			Canvas.SetLeft(canvas1, xPoint.Position.X - size);
 			Canvas.SetTop(canvas1, mainCanvas.Height - (xPoint.Position.Y + size));
 			mainCanvas.Children.Add(canvas1);
@@ -402,7 +417,7 @@ namespace NetDXFViewer
 		/*Get Block in canvas*/
 		public static Canvas GetBlock(Block xBlock, AciColor blockColor, Lineweight linew)
 		{
-			initMaxPt();
+			
 			Canvas canvas1 = new Canvas();
 			canvas1.Height = 100;
 			canvas1.Width = 100;
@@ -447,10 +462,10 @@ namespace NetDXFViewer
 		{
 			xInsert.Block.Layer = xInsert.Layer;
 			Canvas canvas1 = new Canvas();
-
+			AddNewMaxDim();
 			canvas1 = GetBlock(xInsert.Block, xInsert.Color, xInsert.Lineweight);
 			
-			Vector2 vCenter = getBlockCenter();
+			//Vector2 vCenter = getBlockCenter();
 			
 			//canvas1.Background = new SolidColorBrush(Colors.DarkRed);
 			
@@ -471,14 +486,37 @@ namespace NetDXFViewer
 			
 
 			//if(xInsert.Rotation != 0.0) canvas1.RenderTransform = new RotateTransform(xInsert.Rotation,Canvas.GetLeft(canvas1)+vCenter.X,Canvas.GetTop(canvas1)-maxY/2-canvas1.Height);
-			if(xInsert.Rotation != 0.0) canvas1.RenderTransform = new RotateTransform(xInsert.Rotation,vCenter.X,-vCenter.Y+canvas1.Height);
 			
 			
-			DrawUtils.DrawPoint(maxX+xInsert.Position.X,maxY+xInsert.Position.Y,canvas1,Colors.Red,15,0.2);
-			DrawUtils.DrawPoint(minX+xInsert.Position.X,minY+xInsert.Position.Y,canvas1,Colors.Green,10,0.4);
-			DrawUtils.DrawPoint(vCenter.X,vCenter.Y,canvas1,Colors.Yellow,10,0.2);
-			Debug.WriteLine("MaxX="+maxX+" MaxY="+maxY);
-			Debug.WriteLine("MaxX="+minX+" MaxY="+minY);
+			
+			
+			DimMax dim = GetLastMaxDim();
+			dim.maxX = dim.maxX+xInsert.Position.X;
+			dim.maxY = dim.maxY+xInsert.Position.Y;
+			dim.minX = dim.minX+xInsert.Position.X;
+			dim.minY = dim.minY+xInsert.Position.Y;
+			Vector2 vCenter = getBlockCenter();
+			if(xInsert.Rotation != 0.0)
+			{
+				canvas1.RenderTransform = new RotateTransform(xInsert.Rotation,vCenter.X,-vCenter.Y+canvas1.Height);
+			}
+			
+			if((xInsert.Scale.X != 1.0 ||xInsert.Scale.Y != 1.0) && xInsert.Scale.X != 0 && xInsert.Scale.Y != 0)
+			{
+				canvas1.RenderTransform = new ScaleTransform(xInsert.Scale.X,xInsert.Scale.Y,vCenter.X,-vCenter.Y+canvas1.Height);
+			}
+			
+			
+			
+			/*DrawUtils.DrawPoint(dim.maxX+xInsert.Position.X,dim.maxY+xInsert.Position.Y,canvas1,Colors.Red,15,0.2);
+			DrawUtils.DrawPoint(dim.minX+xInsert.Position.X,dim.minY+xInsert.Position.Y,canvas1,Colors.Green,10,0.4);
+			DrawUtils.DrawPoint(vCenter.X,vCenter.Y,canvas1,Colors.Yellow,10,0.2);*/
+			
+			
+			
+			Debug.WriteLine("Insert="+xInsert.Block.Name+" scale="+xInsert.Scale.ToString());
+			Debug.WriteLine("MaxX="+dim.maxX+" MaxY="+dim.maxY);
+			Debug.WriteLine("MinX="+dim.minX+" MinY="+dim.minY);
 			Debug.WriteLine("centerX="+vCenter.X+" centerY="+vCenter.Y);
 			Debug.WriteLine("canvasX="+Canvas.GetLeft(canvas1)+" canvasY="+Canvas.GetTop(canvas1));
 			
@@ -747,10 +785,14 @@ namespace NetDXFViewer
 		
 		public static void getMaxPt(System.Windows.Point pt)
 		{
-			if(pt.X > maxX) maxX=pt.X;
-			if(pt.Y > maxY) maxY=pt.Y;
-			if(pt.X < minX) minX=pt.X;
-			if(pt.Y < minY) minY=pt.Y;
+			DimMax dim = GetLastMaxDim();
+			if (dim != null)
+			{
+				if(pt.X > dim.maxX) dim.maxX=pt.X;
+				if(pt.Y > dim.maxY) dim.maxY=pt.Y;
+				if(pt.X < dim.minX) dim.minX=pt.X;
+				if(pt.Y < dim.minY) dim.minY=pt.Y;
+			}
 		}
 		
 		public static void getMaxPt(double X, double Y)
@@ -771,22 +813,65 @@ namespace NetDXFViewer
 			getMaxPt(pt);
 		}
 		
-		public static void initMaxPt()
+		/*public static void initMaxPt()
 		{
 			maxX=Double.MinValue;
 			minX=Double.MaxValue;
 			maxY=Double.MinValue;
 			minY=Double.MaxValue;
-		}
+		}*/
 		
 		
 		public static Vector2 getBlockCenter()
 		{
-			Vector2 v1 = new Vector2(minX,minY);
-			Vector2 v2 = new Vector2(maxX,maxY);
+			DimMax dim = GetLastMaxDim();
+			Vector2 v1 = new Vector2(dim.minX,dim.minY);
+			Vector2 v2 = new Vector2(dim.maxX,dim.maxY);
 			Vector2 vres = (v1+v2)/2;
 			
 			return vres;
+		}
+		
+		public static DimMax GetLastMaxDim()
+		{
+			int pos = listDim.Count-1;
+			if(pos >= 0) return listDim[pos]; else return null;
+			
+		}
+		
+		public static void DeleteLastMaxDim()
+		{
+			int pos = listDim.Count-1;
+			if(pos >= 0) listDim.RemoveAt(pos);
+			
+		}
+		
+		public static void AddNewMaxDim()
+		{
+			DimMax newDim = new DimMax();
+			listDim.Add(newDim);
+		}
+		
+		public static void RazMaxDim()
+		{
+			dimDoc.maxX = double.MinValue;
+			dimDoc.maxY = double.MinValue;
+			dimDoc.minX = double.MaxValue;
+			dimDoc.minY = double.MaxValue;
+			listDim.Clear();
+		}
+		
+		public static void CalcMaxDimDoc()
+		{
+			foreach (DimMax dim in listDim)
+			{
+				if(dim.maxX > dimDoc.maxX) dimDoc.maxX=dim.maxX;
+				if(dim.maxY > dimDoc.maxY) dimDoc.maxY=dim.maxY;
+				if(dim.minX < dimDoc.minX) dimDoc.minX=dim.minX;
+				if(dim.minY < dimDoc.minY) dimDoc.minY=dim.minY;
+			}
+			
+			Debug.WriteLine("DimMaxDoc: maxX="+dimDoc.maxX+" maxY="+dimDoc.maxY+" minX="+dimDoc.minX+" minY="+dimDoc.minY);
 		}
 		
 	}

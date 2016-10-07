@@ -39,7 +39,8 @@ namespace NetDXFViewer
 			
 			//mainGrid.Children.Clear();
 			mainCanvas.Children.Clear();
-			
+			DrawEntities.RazMaxDim();
+			DrawEntities.AddNewMaxDim();
 			
 			
 			mainGrid.HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -49,13 +50,18 @@ namespace NetDXFViewer
 			border.Height =GridHeight;
 			border.Width =GridWidth;
 			border.Background = new SolidColorBrush(bgColor);
-					
+			
 			
 			mainCanvas.Name = "mainCanvas";
-
+			if (DxfDoc.DrawingVariables.AcadVer < netDxf.Header.DxfVersion.AutoCad2000) DrawUtils.DrawText("Le format du fichier doit être dxf2000 ou supérieur.",10,Colors.Red,20,50,mainCanvas);
 			GetCanvas(DxfDoc,mainCanvas);
 			
-			if(avecOrigine==true) DrawUtils.DrawOrigin(mainCanvas);
+			if(avecOrigine==true) 
+			{
+				DrawEntities.AddNewMaxDim();
+				DrawUtils.DrawOrigin(mainCanvas);
+				DrawEntities.DeleteLastMaxDim();
+			}
 			
 			if(avecGrille==true)
 			{
@@ -75,7 +81,7 @@ namespace NetDXFViewer
 			Canvas.SetTop(mainCanvas,GridHeight/2);
 			Canvas.SetLeft(mainCanvas,GridWidth/2);
 			
-			border.Reset(GridHeight,GridWidth);
+			border.Reset(GridHeight,GridWidth,true);
 			
 			
 			
@@ -107,6 +113,11 @@ namespace NetDXFViewer
 		public Grid GetMainGrid(netDxf.DxfDocument dxfFile)
 		{
 			return GetMainGrid(dxfFile,true,true,Window_bgColor);
+		}
+		
+		public Grid GetMainGrid(netDxf.DxfDocument dxfFile,bool avecGrille,bool avecOrigine)
+		{
+			return GetMainGrid(dxfFile,avecGrille,avecOrigine,Window_bgColor);
 		}
 		
 		public static Canvas CreateBgCanvas()
