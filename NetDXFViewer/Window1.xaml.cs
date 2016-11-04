@@ -42,10 +42,12 @@ namespace NetDXFViewer
 
 			myDXF.GridHeight = 5000;
 			myDXF.GridWidth = 5000;
-			
-			
+			myDXF.ViewHeight = grid1.ActualHeight;
+			myDXF.ViewWidth = grid1.ActualWidth;
+			myDXF.WinHeight = this.Height;
+			myDXF.WinWidth = this.Width;
 
-			myDXF.border.Reset();
+			myDXF.border.Reset(myDXF.GridHeight,myDXF.GridWidth,true,this.Height,this.Width,this.Height,this.Width);
 			DrawDXF();
 			
 			Button resetBtn = new Button();
@@ -53,7 +55,7 @@ namespace NetDXFViewer
 			resetBtn.VerticalAlignment=VerticalAlignment.Top;
 			resetBtn.HorizontalAlignment=HorizontalAlignment.Left;
 			resetBtn.Content = "Reset";
-			resetBtn.Click += ResetButton_Click;
+			resetBtn.Click += ZoomOut_Click;
 			StackPanel stack = new StackPanel();
 			stack.Children.Add(resetBtn);
 			
@@ -84,12 +86,24 @@ namespace NetDXFViewer
 		}
 		
 		
+		private void ZoomOut_Click(object sender, RoutedEventArgs e)
+		{
+			
+			
+			Point current = myDXF.border.CurrentPosition(myDXF.GridHeight,myDXF.GridWidth,((Grid)Application.Current.MainWindow.Content).ActualHeight,((Grid)Application.Current.MainWindow.Content).ActualWidth);
+			//DrawUtils.DrawPoint(current.X,current.Y,this.myDXF.mainCanvas,Colors.Red,25,1);
+			
+			myDXF.border.Zoom(myDXF.GridHeight,myDXF.GridWidth,((Grid)Application.Current.MainWindow.Content).ActualHeight,((Grid)Application.Current.MainWindow.Content).ActualWidth,current.X,current.Y,myDXF.border.CurrentZoom()+0.2);
+		}
+		
 		
 		private void ZoomAuto_Click(object sender, RoutedEventArgs e)
 		{
 			
 			
-			myDXF.border.Reset(5000,5000,(myDXF.DxfDoc.DrawingVariables.AcadVer < netDxf.Header.DxfVersion.AutoCad2000));
+			myDXF.border.ZoomAuto(5000,5000,((Grid)Application.Current.MainWindow.Content).ActualHeight,((Grid)Application.Current.MainWindow.Content).ActualWidth);
+			//myDXF.border.ZoomAuto(5000,5000,523,784);
+			//myDXF.border.ZoomAuto(5000,5000,Application.Current.MainWindow.Height,Application.Current.MainWindow.Width);
 		}
 		
 		
@@ -98,6 +112,9 @@ namespace NetDXFViewer
 			//IMGutil.SaveCanvas(this,myDXF.mainCanvas,96,@"c:\temp\logo.png");
 			
 			myDXF.border.Reset();
+			//myDXF.border.ZoomOut(myDXF.GridHeight,myDXF.GridWidth,myDXF.WinHeight,myDXF.WinWidth);
+			//myDXF.border.ZoomAuto(5000,5000,523,784);
+
 		}
 		
 		private void DrawDXF_Click(object sender, RoutedEventArgs e)
@@ -142,10 +159,14 @@ namespace NetDXFViewer
 			Vector3 pos= new Vector3(myInsert2.Position.X+5,myInsert2.Position.Y,0);
 			myInsert2.Position = pos;
 			myDXF.DxfDoc.AddEntity(myInsert2);
-			*/
+			 */
 			
-			if(fileDXF=="") fileDXF="swan.dxf";
+			if(fileDXF=="") fileDXF="sample2.dxf";
 			this.Content = myDXF.GetMainGrid(fileDXF,true,true);
+			
+			
+			//myDXF.border.ZoomAuto(5000,5000,((Grid)Application.Current.MainWindow.Content).ActualHeight,((Grid)Application.Current.MainWindow.Content).ActualWidth);
+			myDXF.border.ZoomAuto(5000,5000,win1.myDXF.WinHeight,win1.myDXF.WinWidth);
 
 		}
 		
@@ -162,7 +183,7 @@ namespace NetDXFViewer
 			myDXF.DxfDoc = new DxfDocument();
 			//myDXF.DxfDoc.AddEntity(ligneTmp);
 			
-			if(fileDXF=="") fileDXF="vulture.dxf";
+			if(fileDXF=="") fileDXF="raptor.dxf";
 			netDxf.Blocks.Block myBlock = netDxf.Blocks.Block.Load(fileDXF);
 			netDxf.Entities.Insert myInsert = new netDxf.Entities.Insert(myBlock);
 			

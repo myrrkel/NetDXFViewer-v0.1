@@ -244,14 +244,14 @@ namespace NetDXFViewer
 				mainCanvas.Height - (arc.Center.Y + Math.Sin(arc.EndAngle * Math.PI / 180) * arc.Radius));
 			
 
-			
+			Debug.WriteLine("debut:"+startPoint.Y+" fin:"+endPoint.Y);
 
 			
-			/*getMaxPt((arc.Center.X + Math.Cos(arc.StartAngle * Math.PI / 180) * arc.Radius),
+			getMaxPt((arc.Center.X + Math.Cos(arc.StartAngle * Math.PI / 180) * arc.Radius),
 			         (arc.Center.Y + Math.Sin(arc.StartAngle * Math.PI / 180) * arc.Radius));
 			
 			getMaxPt((arc.Center.X + Math.Cos(arc.EndAngle * Math.PI / 180) * arc.Radius),
-			         (arc.Center.Y + Math.Sin(arc.EndAngle * Math.PI / 180) * arc.Radius));*/
+			         (arc.Center.Y + Math.Sin(arc.EndAngle * Math.PI / 180) * arc.Radius));
 
 			
 			
@@ -404,7 +404,7 @@ namespace NetDXFViewer
 		public static void DrawDimension(Dimension xDim, Canvas mainCanvas)
 		{
 			/*Debug.WriteLine("Dim:"+xDim.Handle+" Txt="+xDim.UserText+" Type="+xDim.DimensionType.ToString());*/
-			Debug.WriteLine("LineweightDim=" + xDim.Lineweight.ToString());
+			//Debug.WriteLine("LineweightDim=" + xDim.Lineweight.ToString());
 			xDim.Block.Layer = xDim.Layer;
 			Canvas canvas1 = GetBlock(xDim.Block, xDim.Color, xDim.Lineweight);
 			
@@ -514,11 +514,11 @@ namespace NetDXFViewer
 			
 			
 			
-			Debug.WriteLine("Insert="+xInsert.Block.Name+" scale="+xInsert.Scale.ToString());
+			/*Debug.WriteLine("Insert="+xInsert.Block.Name+" scale="+xInsert.Scale.ToString());
 			Debug.WriteLine("MaxX="+dim.maxX+" MaxY="+dim.maxY);
 			Debug.WriteLine("MinX="+dim.minX+" MinY="+dim.minY);
 			Debug.WriteLine("centerX="+vCenter.X+" centerY="+vCenter.Y);
-			Debug.WriteLine("canvasX="+Canvas.GetLeft(canvas1)+" canvasY="+Canvas.GetTop(canvas1));
+			Debug.WriteLine("canvasX="+Canvas.GetLeft(canvas1)+" canvasY="+Canvas.GetTop(canvas1));*/
 			
 			foreach (netDxf.Entities.Attribute xAttrib in xInsert.Attributes) {
 				xAttrib.Layer = xInsert.Layer;
@@ -680,11 +680,11 @@ namespace NetDXFViewer
 			foreach (netDxf.Entities.HatchBoundaryPath xPath in xHatch.BoundaryPaths) {
 				segments = new List<PathSegment>();
 				
-				/*Debug.WriteLine("xpath:" + xPath.PathType);*/
+				Debug.WriteLine("xpath:" + xPath.PathType);
 				int j = 0;
 				foreach (netDxf.Entities.HatchBoundaryPath.Edge xEdge in xPath.Edges) {
 					
-					/*Debug.WriteLine("xEdge:" + xEdge.Type);*/
+					Debug.WriteLine("xEdge:" + xEdge.Type);
 
 					if (xEdge.Type == netDxfPath.EdgeType.Line) {
 						netDxfPath.Line wLine = (netDxfPath.Line)xEdge;
@@ -695,9 +695,9 @@ namespace NetDXFViewer
 					}
 					j++;
 					
-					/*
+					
 					if(xEdge.Type==netDxf.Entities.HatchBoundaryPath.EdgeType.Line) DrawLine((netDxf.Entities.Line)xEdge.ConvertTo(),mainCanvas);
-					if(xEdge.Type==netDxf.Entities.HatchBoundaryPath.EdgeType.Ellipse) DrawEllipse((netDxf.Entities.Ellipse)xEdge.ConvertTo(),mainCanvas);
+					/*if(xEdge.Type==netDxf.Entities.HatchBoundaryPath.EdgeType.Ellipse) DrawEllipse((netDxf.Entities.Ellipse)xEdge.ConvertTo(),mainCanvas);
 					if(xEdge.Type==netDxf.Entities.HatchBoundaryPath.EdgeType.Spline) DrawSpline((netDxf.Entities.Spline)xEdge.ConvertTo(),mainCanvas);
 					if(xEdge.Type==netDxf.Entities.HatchBoundaryPath.EdgeType.Arc) DrawArc((netDxf.Entities.Arc)xEdge.ConvertTo(),mainCanvas);
 					if(xEdge.Type==netDxf.Entities.HatchBoundaryPath.EdgeType.Polyline) DrawLwPolyline((netDxf.Entities.LwPolyline)xEdge.ConvertTo(),mainCanvas);
@@ -793,6 +793,7 @@ namespace NetDXFViewer
 				if(pt.X < dim.minX) dim.minX=pt.X;
 				if(pt.Y < dim.minY) dim.minY=pt.Y;
 			}
+			
 		}
 		
 		public static void getMaxPt(double X, double Y)
@@ -871,7 +872,7 @@ namespace NetDXFViewer
 				if(dim.minY < dimDoc.minY) dimDoc.minY=dim.minY;
 			}
 			
-			Debug.WriteLine("DimMaxDoc: maxX="+dimDoc.maxX+" maxY="+dimDoc.maxY+" minX="+dimDoc.minX+" minY="+dimDoc.minY);
+			//Debug.WriteLine("DimMaxDoc: maxX="+dimDoc.maxX+" maxY="+dimDoc.maxY+" minX="+dimDoc.minX+" minY="+dimDoc.minY);
 		}
 		
 	}

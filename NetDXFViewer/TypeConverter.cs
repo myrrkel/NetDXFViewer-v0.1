@@ -324,7 +324,7 @@ namespace NetDXFViewer
 			}
 			else if (myPattern.Fill==netDxf.Entities.HatchFillType.SolidFill)
 			{
-				resBrush = PatternSolidFillToBrush((HatchGradientPattern)myPattern,myColor);
+				//resBrush = PatternSolidFillToBrush((HatchGradientPattern)myPattern,myColor);
 			}
 			
 			return resBrush;

@@ -29,6 +29,10 @@ namespace NetDXFViewer
 
 		public double GridHeight {get; set; }
 		public double GridWidth {get; set; }
+		public double WinHeight {get; set; }
+		public double WinWidth {get; set; }
+		public double ViewHeight {get; set; }
+		public double ViewWidth {get; set; }
 		public netDxf.DxfDocument DxfDoc;
 		public ZoomBorder border = new ZoomBorder();
 		public Canvas mainCanvas= new Canvas();
@@ -37,7 +41,6 @@ namespace NetDXFViewer
 		public Grid GetMainGrid(netDxf.DxfDocument dxfFile,bool avecGrille,bool avecOrigine,Color bgColor)
 		{
 			
-			//mainGrid.Children.Clear();
 			mainCanvas.Children.Clear();
 			DrawEntities.RazMaxDim();
 			DrawEntities.AddNewMaxDim();
@@ -56,7 +59,7 @@ namespace NetDXFViewer
 			if (DxfDoc.DrawingVariables.AcadVer < netDxf.Header.DxfVersion.AutoCad2000) DrawUtils.DrawText("Le format du fichier doit être dxf2000 ou supérieur.",10,Colors.Red,20,50,mainCanvas);
 			GetCanvas(DxfDoc,mainCanvas);
 			
-			if(avecOrigine==true) 
+			if(avecOrigine==true)
 			{
 				DrawEntities.AddNewMaxDim();
 				DrawUtils.DrawOrigin(mainCanvas);
@@ -78,10 +81,11 @@ namespace NetDXFViewer
 			{
 				border.Child = mainCanvas;
 			}
+			
 			Canvas.SetTop(mainCanvas,GridHeight/2);
 			Canvas.SetLeft(mainCanvas,GridWidth/2);
 			
-			border.Reset(GridHeight,GridWidth,true);
+			//border.Reset(GridHeight,GridWidth,true,ViewHeight,ViewWidth,WinHeight,WinWidth);
 			
 			
 			
@@ -300,15 +304,15 @@ namespace NetDXFViewer
 			
 			
 			/*Dessin Mesh*/
-			Debug.WriteLine("nb Underlay="+DxfDoc.Meshes.Count.ToString());
+			Debug.WriteLine("nb Mesh="+DxfDoc.Meshes.Count.ToString());
 			foreach (netDxf.Entities.Mesh xMesh in DxfDoc.Meshes)
 			{
 				DrawEntities.DrawMesh(xMesh,mainCanvas);
 			}
 			
-			Debug.WriteLine("DXFDoc:"+DxfDoc.DrawingVariables.LUnits.ToString());
+			/*Debug.WriteLine("DXFDoc:"+DxfDoc.DrawingVariables.LUnits.ToString());
 			Debug.WriteLine("DXFDoc TextSize:"+DxfDoc.DrawingVariables.TextSize.ToString());
-			Debug.WriteLine("DXFDoc InsUnits:"+DxfDoc.DrawingVariables.InsUnits.ToString());
+			Debug.WriteLine("DXFDoc InsUnits:"+DxfDoc.DrawingVariables.InsUnits.ToString());*/
 			
 		}
 	}
