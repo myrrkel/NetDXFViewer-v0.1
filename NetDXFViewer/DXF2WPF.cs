@@ -124,6 +124,13 @@ namespace NetDXFViewer
 			return GetMainGrid(dxfFile,avecGrille,avecOrigine,Window_bgColor);
 		}
 		
+				
+		public Grid GetMainGrid(bool avecGrille,bool avecOrigine)
+		{
+			if (DxfDoc==null) DxfDoc = new DxfDocument();
+			return GetMainGrid(DxfDoc,avecGrille,avecOrigine,Window_bgColor);
+		}
+		
 		public static Canvas CreateBgCanvas()
 		{
 			Canvas BgCanvas= new Canvas();
@@ -139,8 +146,8 @@ namespace NetDXFViewer
 		
 		public static void GetCanvas(netDxf.DxfDocument DxfDoc,Canvas mainCanvas)
 		{
-			mainCanvas.Width  = 250;
-			mainCanvas.Height = 250;
+			mainCanvas.Width  = 0;
+			mainCanvas.Height = 0;
 			
 			
 			

@@ -156,7 +156,7 @@ namespace NetDXFViewer
 				double scale;
 
 				DrawEntities.CalcMaxDimDoc();
-
+				if (DrawEntities.dimDoc.maxY == double.MinValue || DrawEntities.dimDoc.maxX == double.MinValue) return;
 				hauteurVu = DrawEntities.dimDoc.maxY-DrawEntities.dimDoc.minY;
 				largeurVu = DrawEntities.dimDoc.maxX-DrawEntities.dimDoc.minX;
 				

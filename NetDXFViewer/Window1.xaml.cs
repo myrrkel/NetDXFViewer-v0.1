@@ -90,10 +90,10 @@ namespace NetDXFViewer
 		{
 			
 			
-			Point current = myDXF.border.CurrentPosition(myDXF.GridHeight,myDXF.GridWidth,((Grid)Application.Current.MainWindow.Content).ActualHeight,((Grid)Application.Current.MainWindow.Content).ActualWidth);
+			//Point current = myDXF.border.CurrentPosition(myDXF.GridHeight,myDXF.GridWidth,((Grid)Application.Current.MainWindow.Content).ActualHeight,((Grid)Application.Current.MainWindow.Content).ActualWidth);
 			//DrawUtils.DrawPoint(current.X,current.Y,this.myDXF.mainCanvas,Colors.Red,25,1);
 			
-			myDXF.border.Zoom(myDXF.GridHeight,myDXF.GridWidth,((Grid)Application.Current.MainWindow.Content).ActualHeight,((Grid)Application.Current.MainWindow.Content).ActualWidth,current.X,current.Y,myDXF.border.CurrentZoom()+0.2);
+			myDXF.border.Zoom(myDXF.GridHeight,myDXF.GridWidth,((Grid)Application.Current.MainWindow.Content).ActualHeight,((Grid)Application.Current.MainWindow.Content).ActualWidth,0,0,1);
 		}
 		
 		
@@ -145,13 +145,34 @@ namespace NetDXFViewer
 			
 			myDXF.DxfDoc = new DxfDocument();
 
-			/*
-			if(fileDXF=="") fileDXF="vulture.dxf";
+			
+			if(fileDXF=="") fileDXF="flocon.dxf";
 			netDxf.Blocks.Block myBlock = netDxf.Blocks.Block.Load(fileDXF);
 			netDxf.Entities.Insert myInsert = new netDxf.Entities.Insert(myBlock);
 			
+			myInsert.Position = new Vector3(0,0,0);
+			myInsert.Scale = new Vector3(3,3,0);
+			Vector3 pos0 = new Vector3(myInsert.Position.X,myInsert.Position.Y,0);
+			myInsert.Position = pos0;
+			myInsert.Rotation = 0;
+
 			myDXF.DxfDoc.AddEntity(myInsert);
 			
+			/*netDxf.Blocks.Block myBlock2 = netDxf.Blocks.Block.Load(fileDXF);
+
+			netDxf.Entities.Insert myInsert2 = new netDxf.Entities.Insert(myBlock2);
+			myInsert2.Position = new Vector3(30,40,0);
+			myInsert2.Scale = new Vector3(1,1,0);
+			
+			myInsert2.Color = AciColor.Blue;
+
+			myInsert2.Rotation = 0;
+
+			myDXF.DxfDoc.AddEntity(myInsert2);*/
+			
+			
+			
+			/*
 			netDxf.Entities.Insert myInsert2 = new netDxf.Entities.Insert(myBlock);
 
 			Vector3 scaleInsert = new Vector3(1,-1,1);
@@ -162,7 +183,8 @@ namespace NetDXFViewer
 			 */
 			
 			if(fileDXF=="") fileDXF="sample2.dxf";
-			this.Content = myDXF.GetMainGrid(fileDXF,true,true);
+			//this.Content = myDXF.GetMainGrid(fileDXF,true,true);
+			this.Content = myDXF.GetMainGrid(true,true);
 			
 			
 			//myDXF.border.ZoomAuto(5000,5000,((Grid)Application.Current.MainWindow.Content).ActualHeight,((Grid)Application.Current.MainWindow.Content).ActualWidth);

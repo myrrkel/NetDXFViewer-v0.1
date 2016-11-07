@@ -419,8 +419,8 @@ namespace NetDXFViewer
 		{
 			
 			Canvas canvas1 = new Canvas();
-			canvas1.Height = 100;
-			canvas1.Width = 100;
+			canvas1.Height = 0;
+			canvas1.Width = 0;
 			/*Debug.WriteLine("Block:"+xBlock.Handle+" Owner:"+xBlock.Owner+" OriginX:"+xBlock.Origin.X);*/
 			foreach (netDxf.Entities.EntityObject xEntity in xBlock.Entities) {
 				xEntity.Layer = xBlock.Layer;
@@ -462,26 +462,27 @@ namespace NetDXFViewer
 		{
 			xInsert.Block.Layer = xInsert.Layer;
 			Canvas canvas1 = new Canvas();
+			
 			AddNewMaxDim();
 			canvas1 = GetBlock(xInsert.Block, xInsert.Color, xInsert.Lineweight);
-			
+			DimMax dim = GetLastMaxDim();
 			//Vector2 vCenter = getBlockCenter();
 			
 			//canvas1.Background = new SolidColorBrush(Colors.DarkRed);
 			
 			mainCanvas.Children.Add(canvas1);
 			
-			/*canvas1.Width = maxX;
-			canvas1.Height = maxY;*/
+			//canvas1.Width = dim.maxX - dim.minX;
+			//canvas1.Height = dim.maxY - dim.minY;
+			
+			//Canvas.SetLeft(canvas1, xInsert.Position.X);
+			//Canvas.SetTop(canvas1, xInsert.Position.Y);
+			
+			DrawUtils.DrawPoint(0,0,canvas1,Colors.Red,20,0.1);
 			
 			Canvas.SetLeft(canvas1, xInsert.Position.X);
-			Canvas.SetTop(canvas1, mainCanvas.Height - (xInsert.Position.Y + canvas1.Height));
-			
-			
-			
-			/*Canvas.SetLeft(canvas1, xInsert.Position.X);
-			Canvas.SetTop(canvas1, mainCanvas.Height - (xInsert.Position.Y + canvas1.Height));
-			 */
+			Canvas.SetTop(canvas1, -xInsert.Position.Y);
+			 
 			
 			
 
@@ -490,7 +491,7 @@ namespace NetDXFViewer
 			
 			
 			
-			DimMax dim = GetLastMaxDim();
+			
 			dim.maxX = dim.maxX+xInsert.Position.X;
 			dim.maxY = dim.maxY+xInsert.Position.Y;
 			dim.minX = dim.minX+xInsert.Position.X;
@@ -498,12 +499,13 @@ namespace NetDXFViewer
 			Vector2 vCenter = getBlockCenter();
 			if(xInsert.Rotation != 0.0)
 			{
-				canvas1.RenderTransform = new RotateTransform(xInsert.Rotation,vCenter.X,-vCenter.Y+canvas1.Height);
+				canvas1.RenderTransform = new RotateTransform(xInsert.Rotation,vCenter.X,vCenter.Y+canvas1.Height);
 			}
 			
 			if((xInsert.Scale.X != 1.0 ||xInsert.Scale.Y != 1.0) && xInsert.Scale.X != 0 && xInsert.Scale.Y != 0)
 			{
-				canvas1.RenderTransform = new ScaleTransform(xInsert.Scale.X,xInsert.Scale.Y,vCenter.X,-vCenter.Y+canvas1.Height);
+				//canvas1.RenderTransform = new ScaleTransform(xInsert.Scale.X,xInsert.Scale.Y,0,mainCanvas.Height-xInsert.Position.Y+canvas1.Height*xInsert.Scale.Y);
+				//canvas1.RenderTransform = new ScaleTransform(xInsert.Scale.X,xInsert.Scale.Y,0,canvas1.Height);
 			}
 			
 			
@@ -696,8 +698,8 @@ namespace NetDXFViewer
 					j++;
 					
 					
-					if(xEdge.Type==netDxf.Entities.HatchBoundaryPath.EdgeType.Line) DrawLine((netDxf.Entities.Line)xEdge.ConvertTo(),mainCanvas);
-					/*if(xEdge.Type==netDxf.Entities.HatchBoundaryPath.EdgeType.Ellipse) DrawEllipse((netDxf.Entities.Ellipse)xEdge.ConvertTo(),mainCanvas);
+					/*if(xEdge.Type==netDxf.Entities.HatchBoundaryPath.EdgeType.Line) DrawLine((netDxf.Entities.Line)xEdge.ConvertTo(),mainCanvas);
+					if(xEdge.Type==netDxf.Entities.HatchBoundaryPath.EdgeType.Ellipse) DrawEllipse((netDxf.Entities.Ellipse)xEdge.ConvertTo(),mainCanvas);
 					if(xEdge.Type==netDxf.Entities.HatchBoundaryPath.EdgeType.Spline) DrawSpline((netDxf.Entities.Spline)xEdge.ConvertTo(),mainCanvas);
 					if(xEdge.Type==netDxf.Entities.HatchBoundaryPath.EdgeType.Arc) DrawArc((netDxf.Entities.Arc)xEdge.ConvertTo(),mainCanvas);
 					if(xEdge.Type==netDxf.Entities.HatchBoundaryPath.EdgeType.Polyline) DrawLwPolyline((netDxf.Entities.LwPolyline)xEdge.ConvertTo(),mainCanvas);
@@ -731,12 +733,36 @@ namespace NetDXFViewer
 			System.Windows.Media.Imaging.BitmapImage bi3 = new System.Windows.Media.Imaging.BitmapImage();
 			bi3.BeginInit();
 			/*Uri img_uri = new Uri(xImg.Definition.FileName.Replace(@".\", local));*/
-			Uri img_uri;
+			//Uri img_uri;
+			try {
+				//Uri.TryCreate(xImg.Definition.FileName.Replace(@".\", local),System.UriKind.Absolute,out img_uri);
+				Uri img_uri = new Uri(xImg.Definition.FileName.Replace(@".\", local));
+				if (img_uri.IsFile==true)
+				{
+					bi3.UriSource = img_uri;
+					/*bi3.UriSource = new Uri(@"C:\Users\Michel\Documents\SharpDevelop Projects\NetDXFViewer\NetDXFViewer\bin\Debug\image.jpg");*/
+					bi3.EndInit();
+					wImg.Stretch = Stretch.Fill;
+					wImg.Source = bi3;
+					wImg.Height = xImg.Height;
+					wImg.Width = xImg.Width;
+					Canvas.SetLeft(wImg, xImg.Position.X);
+					Canvas.SetTop(wImg, mainCanvas.Height - xImg.Position.Y - wImg.Height);
+					mainCanvas.Children.Add(wImg);
+				}
+			}
+			catch
+			{
+				Debug.WriteLine("Image introuvable:"+xImg.Definition.FileName.ToString());
+			}
+			
+			
 			//if (Uri.TryCreate(xImg.Definition.FileName.Replace(@".\", local),System.UriKind.Absolute,out img_uri))
-			if (Uri.TryCreate(xImg.Definition.FileName,System.UriKind.Relative,out img_uri))
+			//if (Uri.TryCreate(xImg.Definition.FileName,System.UriKind.Relative,out img_uri))
+			/*if (img_uri.IsFile==true)
 			{
 				bi3.UriSource = img_uri;
-				/*bi3.UriSource = new Uri(@"C:\Users\Michel\Documents\SharpDevelop Projects\NetDXFViewer\NetDXFViewer\bin\Debug\image.jpg");*/
+				//bi3.UriSource = new Uri(@"C:\Users\Michel\Documents\SharpDevelop Projects\NetDXFViewer\NetDXFViewer\bin\Debug\image.jpg");
 				bi3.EndInit();
 				wImg.Stretch = Stretch.Fill;
 				wImg.Source = bi3;
@@ -745,7 +771,7 @@ namespace NetDXFViewer
 				Canvas.SetLeft(wImg, xImg.Position.X);
 				Canvas.SetTop(wImg, mainCanvas.Height - xImg.Position.Y - wImg.Height);
 				mainCanvas.Children.Add(wImg);
-			}
+			}*/
 		}
 		
 		/*Draw Underlay*/

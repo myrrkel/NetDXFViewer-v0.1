@@ -41,6 +41,7 @@ namespace NetDXFViewer
 		{
 			return MColor.FromArgb(color.A, color.R, color.G, color.B);
 		}
+
 		
 		
 		public static void Entity2Shape(netDxf.Entities.EntityObject xEntity, System.Windows.Shapes.Shape wShape)
@@ -324,7 +325,7 @@ namespace NetDXFViewer
 			}
 			else if (myPattern.Fill==netDxf.Entities.HatchFillType.SolidFill)
 			{
-				//resBrush = PatternSolidFillToBrush((HatchGradientPattern)myPattern,myColor);
+				resBrush = PatternSolidFillToBrush((HatchGradientPattern)myPattern,myColor);
 			}
 			
 			return resBrush;
