@@ -147,19 +147,19 @@ namespace NetDXFViewer
 
 			
 		
-			
+			/*
 			netDxf.Blocks.Block myBlock = netDxf.Blocks.Block.Load("P4035PINM.dxf");
 			netDxf.Entities.Insert myInsert = new netDxf.Entities.Insert(myBlock);
 			myInsert.Lineweight= Lineweight.W100;
 			myInsert.LinetypeScale= 100;
 			myInsert.Position = new Vector3(0,100,0);
-			myInsert.Scale = new Vector3(-2,-2,0);
+			myInsert.Scale = new Vector3(-2,2,0);
 			Vector3 pos0 = new Vector3(myInsert.Position.X,myInsert.Position.Y,0);
 			myInsert.Position = pos0;
 			myInsert.Rotation = 0;
 			AciColor bgcolor = new AciColor();
 			myDXF.DxfDoc.AddEntity(myInsert);
-			
+			*/
 			
 			
 			
@@ -187,7 +187,7 @@ namespace NetDXFViewer
 			myDXF.DxfDoc.AddEntity(myInsert2);
 			 */
 			
-			//if(fileDXF=="") fileDXF="sample2.dxf";
+			if(fileDXF=="") fileDXF="test.dxf";
 			if(fileDXF!="")
 			{
 				this.Content = myDXF.GetMainGrid(fileDXF,true,true);

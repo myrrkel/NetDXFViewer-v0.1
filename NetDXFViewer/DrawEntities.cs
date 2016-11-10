@@ -31,11 +31,11 @@ namespace NetDXFViewer
 		
 		public double Height()
 		{
-			return maxX-minX;
+			return maxY-minY;
 		}
 		public double Width()
 		{
-			return maxY-minY;
+			return maxX-minX;
 		}
 	}
 	
@@ -477,15 +477,22 @@ namespace NetDXFViewer
 			DimMax dim = GetLastMaxDim();
 
 			mainCanvas.Children.Add(canvas1);
+			double x1,x2,y1,y2;
 			
 			
 			
 			Vector2 vCenter = getBlockCenter();
 			
-			dim.maxX = dim.maxX*Math.Abs(xInsert.Scale.X)+xInsert.Position.X;
-			dim.maxY = dim.maxY*Math.Abs(xInsert.Scale.Y)+xInsert.Position.Y;
-			dim.minX = dim.minX*Math.Abs(xInsert.Scale.X)+xInsert.Position.X;
-			dim.minY = dim.minY*Math.Abs(xInsert.Scale.Y)+xInsert.Position.Y;
+			
+			x1 = dim.maxX*xInsert.Scale.X+xInsert.Position.X;
+			y1 = dim.maxY*xInsert.Scale.Y+xInsert.Position.Y;
+			x2= dim.minX*xInsert.Scale.X+xInsert.Position.X;
+			y2 = dim.minY*xInsert.Scale.Y+xInsert.Position.Y;
+			
+			dim.maxX = Math.Max(x1,x2);
+			dim.minX = Math.Min(x1,x2);
+			dim.maxY = Math.Max(y1,y2);
+			dim.minY = Math.Min(y1,y2);
 			
 			Canvas.SetLeft(canvas1, xInsert.Position.X);
 			//if (xInsert.Scale.X < 0) Canvas.SetLeft(canvas1, dim.maxX);

@@ -364,20 +364,27 @@ namespace NetDXFViewer
 			mainCanvas.Children.Add(arrowY);
 		}
 		
-		public static RenderTargetBitmap GetImage(Canvas canvas)
+		public static RenderTargetBitmap GetImage(Canvas canvas,double scale=1.0,bool avecFond=false)
 		{
-			Size size = new Size(canvas.Width, canvas.Height);
+			DrawEntities.CalcMaxDimDoc();
+			DimMax dim = DrawEntities.dimDoc;
+			
+			
+			
+			Size size = new Size(dim.Width(), dim.Height());
 			//Size size = new Size(1000, 1000);
 			//System.Windows.Point p0 = new System.Windows.Point(0,-200);
-			System.Windows.Point p0 = new System.Windows.Point(0,-200);
+			System.Windows.Point p0 = new System.Windows.Point(dim.minX,dim.minY);
 			if (size.IsEmpty)
 				return null;
 
-			RenderTargetBitmap result = new RenderTargetBitmap((int)size.Width, (int)size.Height, 96, 96, PixelFormats.Pbgra32);
+			//RenderTargetBitmap result = new RenderTargetBitmap((int)size.Width*2, (int)size.Height*2, 96*2, 96*2, PixelFormats.Pbgra32);
+			RenderTargetBitmap result = new RenderTargetBitmap((int)(size.Width*scale), (int)(size.Height*scale), 96*scale, 96*scale, PixelFormats.Default);
 
 			DrawingVisual drawingvisual = new DrawingVisual();
 			using (DrawingContext context = drawingvisual.RenderOpen())
 			{
+				if(avecFond) context.DrawRectangle(Brushes.White, null, new Rect(p0, size));
 				context.DrawRectangle(new VisualBrush(canvas), null, new Rect(p0, size));
 				context.Close();
 			}
@@ -431,71 +438,71 @@ namespace NetDXFViewer
 		
 	}
 	
-	    public static class IMGutil
-    {
-        public static void SaveWindow(Window window, int dpi, string filename)
-        {
+	public static class IMGutil
+	{
+		public static void SaveWindow(Window window, int dpi, string filename)
+		{
 
-            var rtb = new RenderTargetBitmap(
-                (int)window.Width, //width
-                (int)window.Width, //height
-                dpi, //dpi x
-                dpi, //dpi y 
-                PixelFormats.Pbgra32 // pixelformat
-                );
-            rtb.Render(window);
+			var rtb = new RenderTargetBitmap(
+				(int)window.Width, //width
+				(int)window.Width, //height
+				dpi, //dpi x
+				dpi, //dpi y
+				PixelFormats.Pbgra32 // pixelformat
+			);
+			rtb.Render(window);
 
-            SaveRTBAsPNG(rtb, filename);
+			SaveRTBAsPNG(rtb, filename);
 
-        }
-        
-         public static void SaveCanvas(Window window, Canvas canvas, int dpi, string filename)
-        {
-            Size size = new Size(window.Width , window.Height );
-            canvas.Measure(size);
-            //canvas.Arrange(new Rect(size));
+		}
+		
+		public static void SaveCanvas(Window window, Canvas canvas, int dpi, string filename)
+		{
+			Size size = new Size(window.Width , window.Height );
+			canvas.Measure(size);
+			//canvas.Arrange(new Rect(size));
 
-            var rtb = new RenderTargetBitmap(
-            	5000, 5000,     // (int)window.Width, //width
-                //(int)window.Height, //height
-                dpi, //dpi x
-                dpi, //dpi y 
-                PixelFormats.Pbgra32 // pixelformat
-                );
-            rtb.Render(canvas);
+			var rtb = new RenderTargetBitmap(
+				5000, 5000,     // (int)window.Width, //width
+				//(int)window.Height, //height
+				dpi, //dpi x
+				dpi, //dpi y
+				PixelFormats.Pbgra32 // pixelformat
+			);
+			rtb.Render(canvas);
 
-            SaveRTBAsPNG(rtb, filename);
-        }
-        
+			SaveRTBAsPNG(rtb, filename);
+		}
+		
 
-        public static void SaveCanvas(int hauteur, int largeur, Canvas canvas, int dpi, string filename)
-        {
-            Size size = new Size(largeur, hauteur);
-            canvas.Measure(size);
-            //canvas.Arrange(new Rect(size));
+		public static void SaveCanvas(int hauteur, int largeur, Canvas canvas, int dpi, string filename)
+		{
+			Size size = new Size(largeur, hauteur);
+			canvas.Measure(size);
+			//canvas.Arrange(new Rect(size));
 
-            var rtb = new RenderTargetBitmap(
-            	hauteur, largeur,     // (int)window.Width, //width
-                //(int)window.Height, //height
-                dpi, //dpi x
-                dpi, //dpi y 
-                PixelFormats.Pbgra32 // pixelformat
-                );
-            rtb.Render(canvas);
+			var rtb = new RenderTargetBitmap(
+				hauteur, largeur,     // (int)window.Width, //width
+				//(int)window.Height, //height
+				dpi, //dpi x
+				dpi, //dpi y
+				PixelFormats.Pbgra32 // pixelformat
+			);
+			rtb.Render(canvas);
 
-            SaveRTBAsPNG(rtb, filename);
-        }
+			SaveRTBAsPNG(rtb, filename);
+		}
 
-        private static void SaveRTBAsPNG(RenderTargetBitmap bmp, string filename)
-        {
-            var enc = new System.Windows.Media.Imaging.PngBitmapEncoder();
-            enc.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(bmp));
+		private static void SaveRTBAsPNG(RenderTargetBitmap bmp, string filename)
+		{
+			var enc = new System.Windows.Media.Imaging.PngBitmapEncoder();
+			enc.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(bmp));
 
-            using (var stm = System.IO.File.Create(filename))
-            {
-                enc.Save(stm);
-            }
-        }
-    }
+			using (var stm = System.IO.File.Create(filename))
+			{
+				enc.Save(stm);
+			}
+		}
+	}
 
 }
