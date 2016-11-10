@@ -41,7 +41,21 @@ namespace NetDXFViewer
 		{
 			return MColor.FromArgb(color.A, color.R, color.G, color.B);
 		}
-
+		
+		public static DColor ToDrawingColor(MColor color)
+		{
+			return DColor.FromArgb(color.A, color.R, color.G, color.B);
+		}
+		
+		
+		
+		
+		public static AciColor MColorToAci(MColor color)
+		{
+			AciColor aci = new AciColor();
+			aci.FromColor(TypeConverter.ToDrawingColor(color));
+			return aci;
+		}
 		
 		
 		public static void Entity2Shape(netDxf.Entities.EntityObject xEntity, System.Windows.Shapes.Shape wShape)
@@ -325,7 +339,10 @@ namespace NetDXFViewer
 			}
 			else if (myPattern.Fill==netDxf.Entities.HatchFillType.SolidFill)
 			{
-				resBrush = PatternSolidFillToBrush((HatchGradientPattern)myPattern,myColor);
+				if(myPattern.GetType() == typeof(HatchGradientPattern))
+				{
+					resBrush = PatternSolidFillToBrush((HatchGradientPattern)myPattern,myColor);
+				}
 			}
 			
 			return resBrush;

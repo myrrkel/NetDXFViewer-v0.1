@@ -367,6 +367,8 @@ namespace NetDXFViewer
 		public static RenderTargetBitmap GetImage(Canvas canvas)
 		{
 			Size size = new Size(canvas.Width, canvas.Height);
+			//Size size = new Size(1000, 1000);
+			//System.Windows.Point p0 = new System.Windows.Point(0,-200);
 			System.Windows.Point p0 = new System.Windows.Point(0,-200);
 			if (size.IsEmpty)
 				return null;
@@ -392,6 +394,7 @@ namespace NetDXFViewer
 			
 			FileStream stream = new FileStream(@"c:\temp\logo.png", FileMode.Create);
 			encoder.Save(stream);
+			stream.Close();
 		}
 		
 		
@@ -446,9 +449,7 @@ namespace NetDXFViewer
 
         }
         
-        
-
-        public static void SaveCanvas(Window window, Canvas canvas, int dpi, string filename)
+         public static void SaveCanvas(Window window, Canvas canvas, int dpi, string filename)
         {
             Size size = new Size(window.Width , window.Height );
             canvas.Measure(size);
@@ -456,6 +457,25 @@ namespace NetDXFViewer
 
             var rtb = new RenderTargetBitmap(
             	5000, 5000,     // (int)window.Width, //width
+                //(int)window.Height, //height
+                dpi, //dpi x
+                dpi, //dpi y 
+                PixelFormats.Pbgra32 // pixelformat
+                );
+            rtb.Render(canvas);
+
+            SaveRTBAsPNG(rtb, filename);
+        }
+        
+
+        public static void SaveCanvas(int hauteur, int largeur, Canvas canvas, int dpi, string filename)
+        {
+            Size size = new Size(largeur, hauteur);
+            canvas.Measure(size);
+            //canvas.Arrange(new Rect(size));
+
+            var rtb = new RenderTargetBitmap(
+            	hauteur, largeur,     // (int)window.Width, //width
                 //(int)window.Height, //height
                 dpi, //dpi x
                 dpi, //dpi y 

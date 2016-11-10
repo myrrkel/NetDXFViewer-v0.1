@@ -76,13 +76,7 @@ namespace NetDXFViewer
 				
 				if (init==true)
 				{
-					/*hauteurVu = ((Grid)Application.Current.MainWindow.Content).ActualHeight;
-					largeurVu = ((Grid)Application.Current.MainWindow.Content).ActualWidth;*/
-					
-					/*if(ViewHeight==0) ViewHeight = ((Grid)Application.Current.MainWindow.Content).ActualHeight;
-					if(ViewWidth==0) ViewWidth = ((Grid)Application.Current.MainWindow.Content).ActualWidth;
-					if(WinHeight==0) WinHeight = Application.Current.MainWindow.Height;
-					if(WinWidth==0) WinWidth = Application.Current.MainWindow.Width;*/
+
 					hauteurVu = ViewHeight;
 					largeurVu = ViewWidth;
 					
@@ -107,8 +101,6 @@ namespace NetDXFViewer
 
 				st.ScaleX = scale;
 				st.ScaleY = scale;
-				/*st.CenterX=0;
-				st.CenterY=0;*/
 				var tt = GetTranslateTransform(_child);
 				
 				if(WinHeight==0) WinHeight=ViewHeight;
@@ -117,18 +109,11 @@ namespace NetDXFViewer
 				if (init==true)
 				{
 					tt.X = -gridWidth*scale/2;
-					//tt.Y = -gridHeight*scale/2-(Application.Current.MainWindow.Height*scale)/2+hauteurVu*scale;
-					//Debug.WriteLine("ZoomBorder1 MainWin Height:"+Application.Current.MainWindow.Height);
-					//Debug.WriteLine("ZoomBorder1 WinHeight:"+WinHeight);
-					//tt.Y = -gridHeight*scale/2-(WinHeight*scale)/2+hauteurVu*scale;
 					tt.Y = -gridHeight*scale/2;
 				}
 				else
 				{
 					tt.X = -gridWidth*scale/2-DrawEntities.dimDoc.minX*scale;
-					//tt.Y = -gridHeight*scale/2-(Application.Current.MainWindow.Height*scale)/2+hauteurVu*scale+DrawEntities.dimDoc.minY*scale;
-					//Debug.WriteLine("ZoomBorder2 MainWin Height:"+Application.Current.MainWindow.Height);
-					//Debug.WriteLine("ZoomBorder2 WinHeight:"+WinHeight);
 					tt.Y = -gridHeight*scale/2-(WinHeight*scale)/2+hauteurVu*scale+DrawEntities.dimDoc.minY*scale;
 				}
 
@@ -157,8 +142,8 @@ namespace NetDXFViewer
 
 				DrawEntities.CalcMaxDimDoc();
 				if (DrawEntities.dimDoc.maxY == double.MinValue || DrawEntities.dimDoc.maxX == double.MinValue) return;
-				hauteurVu = DrawEntities.dimDoc.maxY-DrawEntities.dimDoc.minY;
-				largeurVu = DrawEntities.dimDoc.maxX-DrawEntities.dimDoc.minX;
+				hauteurVu = Math.Abs(DrawEntities.dimDoc.maxY-DrawEntities.dimDoc.minY);
+				largeurVu = Math.Abs(DrawEntities.dimDoc.maxX-DrawEntities.dimDoc.minX);
 				
 				scaleY = (WinHeight)/(hauteurVu);
 				scaleX = WinWidth/(largeurVu);
@@ -170,26 +155,18 @@ namespace NetDXFViewer
 					hauteurVu=462;
 				}
 				
-				hauteurUtil = WinHeight-(hauteurVu*scale);
-				largeurUtil = WinWidth-(largeurVu*scale);
+				hauteurUtil = WinHeight-hauteurVu*scale;
+				largeurUtil = WinWidth-largeurVu*scale;
 				
 				var tt = GetTranslateTransform(_child);
-				
 
 				tt.X = -gridWidth*scale/2-DrawEntities.dimDoc.minX*scale;
 				tt.Y = -(gridHeight*scale)/2-250*scale+(WinHeight)+DrawEntities.dimDoc.minY*scale;
 				
-
-				
-				/*Debug.WriteLine("ZoomBorder2 WinHeight:"+WinHeight);
-				Debug.WriteLine("ZoomBorder2 scale:"+scale);
-				Debug.WriteLine("ZoomBorder2 tt.X:"+tt.X+" tt.Y:"+tt.Y);
-				Debug.WriteLine("ZoomBorder2 hauteurVu:"+hauteurVu+" hauteurUtil:"+hauteurUtil);*/
-				
 				var st = GetScaleTransform(_child);
 
-				st.ScaleX = scale;
-				st.ScaleY = scale;
+				st.ScaleX = Math.Abs(scale);
+				st.ScaleY = Math.Abs(scale);
 				
 			}
 		}
@@ -201,20 +178,9 @@ namespace NetDXFViewer
 			Point current = new Point();
 			
 			
-					// tt.X = (-gridWidth*scale*0.5)-(currentX*scale-(WinWidth*scale*0.5))/scale;
-					// (currentX*scale-(WinWidth*scale*0.5))/scale = (-gridWidth*scale*0.5)-tt.X
-					// currentX*scale-(WinWidth*scale*0.5) = ((-gridWidth*scale*0.5)-tt.X)*scale
-					// currentX*scale = ((-gridWidth*scale*0.5)-tt.X)*scale + (WinWidth*scale*0.5)
-					// currentX = (((-gridWidth*scale*0.5)-tt.X)*scale + (WinWidth*scale*0.5))/scale
-					
-					
-					current.X = ((((-gridWidth*st.ScaleX*0.5)-tt.X)*st.ScaleX + (WinWidth*st.ScaleX*0.5))/st.ScaleX)/st.ScaleX;
-			//current.X = (-1*tt.X/st.ScaleX -(gridWidth)/2 + WinWidth);
-			
+			current.X = ((((-gridWidth*st.ScaleX*0.5)-tt.X)*st.ScaleX + (WinWidth*st.ScaleX*0.5))/st.ScaleX)/st.ScaleX;
 			current.Y = ((tt.Y +(gridHeight*st.ScaleY)/2+250*st.ScaleY-WinHeight) + (((WinHeight*st.ScaleY)/2)/st.ScaleY))/st.ScaleY;
 			
-			
-			//Debug.WriteLine("CurrentPosition X="+current.X+" Y="+current.Y);
 			return current;
 		}
 		
@@ -228,13 +194,13 @@ namespace NetDXFViewer
 		public void Zoom(double gridHeight,double gridWidth,double WinHeight,double WinWidth,double scale)
 		{
 			Zoom(gridHeight,gridWidth,WinHeight,WinWidth,CurrentPosition(gridHeight,gridWidth,WinHeight,WinWidth),scale);
-			     
+			
 		}
 		
 		public void Zoom(double gridHeight,double gridWidth,double WinHeight,double WinWidth,Point currentPos,double scale)
 		{
 			Zoom(gridHeight,gridWidth,WinHeight,WinWidth,currentPos.X,currentPos.Y,scale);
-			     
+			
 		}
 		
 		public void Zoom(double gridHeight,double gridWidth,double WinHeight,double WinWidth,double currentX,double currentY,double scale)
@@ -245,35 +211,17 @@ namespace NetDXFViewer
 				double hauteurVu;
 				double largeurVu;
 
-				//double scale = 10;
-
-				
 				var st = GetScaleTransform(_child);
 				var tt = GetTranslateTransform(_child);
 
 				hauteurVu = WinHeight;
 				largeurVu = WinWidth;
 				
-				//tt.X = -gridWidth*scale/2-DrawEntities.dimDoc.minX*scale;
+				
 				tt.X = (-gridWidth*scale*0.5)-(currentX*scale-(WinWidth*scale*0.5))/scale;
 				tt.Y = (-(gridHeight*scale)/2-250*scale+WinHeight)+(currentY*scale-(WinHeight*scale)/2)/scale;
 				tt.Y = (-(gridHeight*scale)/2-250*scale+WinHeight)+(currentY*scale*scale-(WinHeight*scale)/2)/scale;
-				
-				//currentX = ((((-gridWidth*st.ScaleX*0.5)-tt.X)*st.ScaleX + (WinWidth*st.ScaleX*0.5))/st.ScaleX)/st.ScaleX;
-				//currentX*st.ScaleX*st.ScaleX = ((-gridWidth*st.ScaleX*0.5)-tt.X)*st.ScaleX + (WinWidth*st.ScaleX*0.5)
-				//currentX*st.ScaleX*st.ScaleX - (WinWidth*st.ScaleX*0.5) = ((-gridWidth*st.ScaleX*0.5)-tt.X)*st.ScaleX
-				//(currentX*st.ScaleX*st.ScaleX - (WinWidth*st.ScaleX*0.5))/st.ScaleX = -gridWidth*st.ScaleX*0.5-tt.X
 				tt.X = -gridWidth*scale*0.5 - (currentX*scale*scale - (WinWidth*scale*0.5))/scale;
-				
-				
-				
-				
-				//current.Y = ((tt.Y +(gridHeight*scale)/2+250*scale-WinHeight) + (((WinHeight*scale)/2)/scale))/scale;
-				//current.Y*scale = (tt.Y +(gridHeight*scale)/2+250*scale-WinHeight) + (((WinHeight*scale)/2)/scale);
-				//current.Y*scale - WinHeight/2 -(gridHeight*scale)/2+250*scale+WinHeight = tt.Y  ;
-				//tt.Y = -(gridHeight*scale)/2+250*scale+WinHeight + currentY*scale - WinHeight/2 ;
-				//tt.Y = -(gridHeight*scale)/2+250*scale+WinHeight + (currentY*scale - WinHeight/2)/scale ;
-				
 				
 				st.ScaleX = scale;
 				st.ScaleY = scale;

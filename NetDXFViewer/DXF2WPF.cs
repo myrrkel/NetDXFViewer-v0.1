@@ -146,8 +146,8 @@ namespace NetDXFViewer
 		
 		public static void GetCanvas(netDxf.DxfDocument DxfDoc,Canvas mainCanvas)
 		{
-			mainCanvas.Width  = 0;
-			mainCanvas.Height = 0;
+			mainCanvas.Width  = 250;
+			mainCanvas.Height = 250;
 			
 			
 			

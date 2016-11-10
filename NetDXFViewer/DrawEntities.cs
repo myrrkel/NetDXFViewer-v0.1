@@ -28,6 +28,15 @@ namespace NetDXFViewer
 		public  double minY=double.MaxValue;
 		public  double maxX=double.MinValue;
 		public  double maxY=double.MinValue;
+		
+		public double Height()
+		{
+			return maxX-minX;
+		}
+		public double Width()
+		{
+			return maxY-minY;
+		}
 	}
 	
 	public class DrawEntities
@@ -466,61 +475,36 @@ namespace NetDXFViewer
 			AddNewMaxDim();
 			canvas1 = GetBlock(xInsert.Block, xInsert.Color, xInsert.Lineweight);
 			DimMax dim = GetLastMaxDim();
-			//Vector2 vCenter = getBlockCenter();
-			
-			//canvas1.Background = new SolidColorBrush(Colors.DarkRed);
-			
+
 			mainCanvas.Children.Add(canvas1);
 			
-			//canvas1.Width = dim.maxX - dim.minX;
-			//canvas1.Height = dim.maxY - dim.minY;
 			
-			//Canvas.SetLeft(canvas1, xInsert.Position.X);
-			//Canvas.SetTop(canvas1, xInsert.Position.Y);
 			
-			DrawUtils.DrawPoint(0,0,canvas1,Colors.Red,20,0.1);
+			Vector2 vCenter = getBlockCenter();
+			
+			dim.maxX = dim.maxX*Math.Abs(xInsert.Scale.X)+xInsert.Position.X;
+			dim.maxY = dim.maxY*Math.Abs(xInsert.Scale.Y)+xInsert.Position.Y;
+			dim.minX = dim.minX*Math.Abs(xInsert.Scale.X)+xInsert.Position.X;
+			dim.minY = dim.minY*Math.Abs(xInsert.Scale.Y)+xInsert.Position.Y;
 			
 			Canvas.SetLeft(canvas1, xInsert.Position.X);
-			Canvas.SetTop(canvas1, -xInsert.Position.Y);
-			 
+			//if (xInsert.Scale.X < 0) Canvas.SetLeft(canvas1, dim.maxX);
+			Canvas.SetTop(canvas1, mainCanvas.Height - (xInsert.Position.Y + canvas1.Height));
+			//if (xInsert.Scale.Y < 0) Canvas.SetTop(canvas1, mainCanvas.Height - (dim.maxY));;
 			
-			
-
-			//if(xInsert.Rotation != 0.0) canvas1.RenderTransform = new RotateTransform(xInsert.Rotation,Canvas.GetLeft(canvas1)+vCenter.X,Canvas.GetTop(canvas1)-maxY/2-canvas1.Height);
-			
-			
-			
-			
-			
-			dim.maxX = dim.maxX+xInsert.Position.X;
-			dim.maxY = dim.maxY+xInsert.Position.Y;
-			dim.minX = dim.minX+xInsert.Position.X;
-			dim.minY = dim.minY+xInsert.Position.Y;
-			Vector2 vCenter = getBlockCenter();
+			TransformGroup trgr = new TransformGroup();
+			canvas1.RenderTransform = trgr;
 			if(xInsert.Rotation != 0.0)
 			{
-				canvas1.RenderTransform = new RotateTransform(xInsert.Rotation,vCenter.X,vCenter.Y+canvas1.Height);
+				trgr.Children.Add(new RotateTransform(xInsert.Rotation,0,0));
+
 			}
 			
 			if((xInsert.Scale.X != 1.0 ||xInsert.Scale.Y != 1.0) && xInsert.Scale.X != 0 && xInsert.Scale.Y != 0)
 			{
-				//canvas1.RenderTransform = new ScaleTransform(xInsert.Scale.X,xInsert.Scale.Y,0,mainCanvas.Height-xInsert.Position.Y+canvas1.Height*xInsert.Scale.Y);
-				//canvas1.RenderTransform = new ScaleTransform(xInsert.Scale.X,xInsert.Scale.Y,0,canvas1.Height);
+				trgr.Children.Add(new ScaleTransform(xInsert.Scale.X,xInsert.Scale.Y,0,0));
 			}
-			
-			
-			
-			/*DrawUtils.DrawPoint(dim.maxX+xInsert.Position.X,dim.maxY+xInsert.Position.Y,canvas1,Colors.Red,15,0.2);
-			DrawUtils.DrawPoint(dim.minX+xInsert.Position.X,dim.minY+xInsert.Position.Y,canvas1,Colors.Green,10,0.4);
-			DrawUtils.DrawPoint(vCenter.X,vCenter.Y,canvas1,Colors.Yellow,10,0.2);*/
-			
-			
-			
-			/*Debug.WriteLine("Insert="+xInsert.Block.Name+" scale="+xInsert.Scale.ToString());
-			Debug.WriteLine("MaxX="+dim.maxX+" MaxY="+dim.maxY);
-			Debug.WriteLine("MinX="+dim.minX+" MinY="+dim.minY);
-			Debug.WriteLine("centerX="+vCenter.X+" centerY="+vCenter.Y);
-			Debug.WriteLine("canvasX="+Canvas.GetLeft(canvas1)+" canvasY="+Canvas.GetTop(canvas1));*/
+
 			
 			foreach (netDxf.Entities.Attribute xAttrib in xInsert.Attributes) {
 				xAttrib.Layer = xInsert.Layer;

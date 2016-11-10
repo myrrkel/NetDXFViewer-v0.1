@@ -80,7 +80,7 @@ namespace NetDXFViewer
 			
 			myDXF.mainGrid.Children.Add(stack);
 			
-			/*DrawUtils.SaveAsPng(DrawUtils.GetImage(myDXF.mainCanvas));*/
+			//DrawUtils.SaveAsPng(DrawUtils.GetImage(myDXF.mainCanvas));
 			
 			
 		}
@@ -146,17 +146,22 @@ namespace NetDXFViewer
 			myDXF.DxfDoc = new DxfDocument();
 
 			
-			if(fileDXF=="") fileDXF="flocon.dxf";
-			netDxf.Blocks.Block myBlock = netDxf.Blocks.Block.Load(fileDXF);
-			netDxf.Entities.Insert myInsert = new netDxf.Entities.Insert(myBlock);
+		
 			
-			myInsert.Position = new Vector3(0,0,0);
-			myInsert.Scale = new Vector3(3,3,0);
+			netDxf.Blocks.Block myBlock = netDxf.Blocks.Block.Load("P4035PINM.dxf");
+			netDxf.Entities.Insert myInsert = new netDxf.Entities.Insert(myBlock);
+			myInsert.Lineweight= Lineweight.W100;
+			myInsert.LinetypeScale= 100;
+			myInsert.Position = new Vector3(0,100,0);
+			myInsert.Scale = new Vector3(-2,-2,0);
 			Vector3 pos0 = new Vector3(myInsert.Position.X,myInsert.Position.Y,0);
 			myInsert.Position = pos0;
 			myInsert.Rotation = 0;
-
+			AciColor bgcolor = new AciColor();
 			myDXF.DxfDoc.AddEntity(myInsert);
+			
+			
+			
 			
 			/*netDxf.Blocks.Block myBlock2 = netDxf.Blocks.Block.Load(fileDXF);
 
@@ -182,13 +187,23 @@ namespace NetDXFViewer
 			myDXF.DxfDoc.AddEntity(myInsert2);
 			 */
 			
-			if(fileDXF=="") fileDXF="sample2.dxf";
-			//this.Content = myDXF.GetMainGrid(fileDXF,true,true);
-			this.Content = myDXF.GetMainGrid(true,true);
-			
+			//if(fileDXF=="") fileDXF="sample2.dxf";
+			if(fileDXF!="")
+			{
+				this.Content = myDXF.GetMainGrid(fileDXF,true,true);
+				DrawUtils.SaveAsPng(DrawUtils.GetImage(myDXF.mainCanvas));
+					
+			}
+			else
+			{
+				this.Content = myDXF.GetMainGrid(true,true);
+			}
 			
 			//myDXF.border.ZoomAuto(5000,5000,((Grid)Application.Current.MainWindow.Content).ActualHeight,((Grid)Application.Current.MainWindow.Content).ActualWidth);
 			myDXF.border.ZoomAuto(5000,5000,win1.myDXF.WinHeight,win1.myDXF.WinWidth);
+			DrawUtils.DrawPoint(100,0,myDXF.mainCanvas,Colors.Red,25,1);
+			DrawUtils.DrawPoint(-225,0,myDXF.mainCanvas,Colors.Red,25,1);
+			DrawUtils.SaveAsPng(DrawUtils.GetImage(myDXF.mainCanvas));
 
 		}
 		
