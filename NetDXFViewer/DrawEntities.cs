@@ -365,6 +365,7 @@ namespace NetDXFViewer
 			wTxt.Margin = new Thickness(0, 0, 0, 0);
 			wTxt.LineStackingStrategy = LineStackingStrategy.BlockLineHeight;
 			wTxt.TextAlignment = TypeConverter.AttachmentPointToAlign(xTxt.AttachmentPoint);
+			//wTxt.TextAlignment = TypeConverter.AttachmentPointToAlign(MTextAttachmentPoint.TopRight);
 			wTxt.FontStretch = FontStretches.UltraExpanded;
 			wTxt.TextWrapping = TextWrapping.Wrap;
 			
@@ -374,11 +375,14 @@ namespace NetDXFViewer
 			if (xTxt.RectangleWidth > 0) {
 				wTxt.Width = xTxt.RectangleWidth;
 				wTxt.MaxWidth = xTxt.RectangleWidth;
+				wTxt.Height = xTxt.Height;
 			} else {
 				wTxt.Width = txtSize.Width;
+				wTxt.Height = txtSize.Height;
 			}
-			Vector3 newPosition = TypeConverter.TextAttachmentToPosition(xTxt.AttachmentPoint, xTxt.Position, wTxt.Width, txtSize.Height);
-
+			//Vector3 newPosition = TypeConverter.TextAttachmentToPosition(MTextAttachmentPoint.TopLeft, xTxt.Position, wTxt.Width, txtSize.Height);
+			//Vector3 newPosition = TypeConverter.TextAttachmentToPosition(xTxt.AttachmentPoint, xTxt.Position, wTxt.Width, txtSize.Height);
+			Vector3 newPosition = TypeConverter.TextAttachmentToPosition(xTxt.AttachmentPoint, xTxt.Position, wTxt.Width, wTxt.Height,xTxt.Rotation);
 			RotateTransform rotat = new RotateTransform(-xTxt.Rotation);
 			rotat.CenterX = wTxt.Width / 2;
 			rotat.CenterY = txtSize.Height / 2;

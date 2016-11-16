@@ -198,8 +198,16 @@ namespace NetDXFViewer
 			return hAlign;
 		}
 		
+		public static double Deg2Rad(double degree)
+		{
+			double radian = (Math.PI / 180) * degree;
+			return radian;
 		
-		public static Vector3 TextAttachmentToPosition(MTextAttachmentPoint Attach,Vector3 position,double width,double height)
+		}
+		
+		
+		
+		public static Vector3 TextAttachmentToPosition(MTextAttachmentPoint Attach,Vector3 position,double width,double height,double angle)
 		{
 			Vector3 newPos = new Vector3();
 			newPos = position;
@@ -207,7 +215,9 @@ namespace NetDXFViewer
 			List<int> list = new List<int> {2,5,8}; /*Center*/
 			if (list.Contains((int)Attach))
 			{
-				newPos.X = newPos.X-width/2;
+				newPos.X = newPos.X  -Math.Cos(Deg2Rad(angle))*width/2   -Math.Sin(Deg2Rad(angle))*(height+height/2 +1);
+				//newPos.X = newPos.X - height  -Math.Cos(Deg2Rad(angle))*width/2   -Math.Sin(Deg2Rad(angle))*(height/2 +1);
+				//newPos.X = newPos.X -Math.Sin(Deg2Rad(90))*width/2 -Math.Cos(Deg2Rad(90))*height/2;
 			}
 			
 			list = new List<int> {1,4,7}; /*Left*/
@@ -225,7 +235,7 @@ namespace NetDXFViewer
 			list = new List<int> {1,2,3}; /*Top*/
 			if (list.Contains((int)Attach))
 			{
-				/*newPos.Y = newPos.Y+height;*/
+				newPos.Y = newPos.Y -Math.Sin(Deg2Rad(90))*(height/2 +1);
 			}
 			
 			list = new List<int> {4,5,6}; /*Middle*/
@@ -238,7 +248,9 @@ namespace NetDXFViewer
 			list =  new List<int>{7,8,9}; /*Bottom*/
 			if (list.Contains((int)Attach))
 			{
-				newPos.Y = newPos.Y+height;
+				//newPos.Y = newPos.Y + Math.Sin(Deg2Rad(angle))*height/2 + 6;
+				newPos.Y = newPos.Y + Math.Sin(Deg2Rad(angle))*height/2 + Math.Cos(Deg2Rad(angle))*(height-6);
+				 //- Math.Sin(Deg2Rad(90))*(width +1)
 			}
 			
 			return newPos;

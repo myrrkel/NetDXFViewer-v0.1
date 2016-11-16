@@ -187,7 +187,7 @@ namespace NetDXFViewer
 			myDXF.DxfDoc.AddEntity(myInsert2);
 			 */
 			
-			if(fileDXF=="") fileDXF="test.dxf";
+			if(fileDXF=="") fileDXF=@"c:\temp\test2.dxf";
 			if(fileDXF!="")
 			{
 				this.Content = myDXF.GetMainGrid(fileDXF,true,true);
@@ -201,8 +201,8 @@ namespace NetDXFViewer
 			
 			//myDXF.border.ZoomAuto(5000,5000,((Grid)Application.Current.MainWindow.Content).ActualHeight,((Grid)Application.Current.MainWindow.Content).ActualWidth);
 			myDXF.border.ZoomAuto(5000,5000,win1.myDXF.WinHeight,win1.myDXF.WinWidth);
-			DrawUtils.DrawPoint(100,0,myDXF.mainCanvas,Colors.Red,25,1);
-			DrawUtils.DrawPoint(-225,0,myDXF.mainCanvas,Colors.Red,25,1);
+			//DrawUtils.DrawPoint(100,0,myDXF.mainCanvas,Colors.Red,25,1);
+			//DrawUtils.DrawPoint(-225,0,myDXF.mainCanvas,Colors.Red,25,1);
 			DrawUtils.SaveAsPng(DrawUtils.GetImage(myDXF.mainCanvas));
 
 		}
