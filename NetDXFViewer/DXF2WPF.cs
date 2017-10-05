@@ -38,6 +38,9 @@ namespace NetDXFViewer
 		public Canvas mainCanvas= new Canvas();
 		public Grid mainGrid = new Grid();
 		
+		
+		
+		
 		public Grid GetMainGrid(netDxf.DxfDocument dxfFile,bool avecGrille,bool avecOrigine,Color bgColor)
 		{
 			

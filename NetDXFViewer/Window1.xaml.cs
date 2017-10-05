@@ -109,11 +109,11 @@ namespace NetDXFViewer
 		
 		private void ResetButton_Click(object sender, RoutedEventArgs e)
 		{
-			//IMGutil.SaveCanvas(this,myDXF.mainCanvas,96,@"c:\temp\logo.png");
+			
 			
 			myDXF.border.Reset();
-			//myDXF.border.ZoomOut(myDXF.GridHeight,myDXF.GridWidth,myDXF.WinHeight,myDXF.WinWidth);
-			//myDXF.border.ZoomAuto(5000,5000,523,784);
+			/*myDXF.border.ZoomOut(myDXF.GridHeight,myDXF.GridWidth,myDXF.WinHeight,myDXF.WinWidth);
+			myDXF.border.ZoomAuto(5000,5000,523,784);*/
 
 		}
 		
@@ -187,11 +187,11 @@ namespace NetDXFViewer
 			myDXF.DxfDoc.AddEntity(myInsert2);
 			 */
 			
-			if(fileDXF=="") fileDXF=@"c:\temp\test2.dxf";
+			if(fileDXF=="") fileDXF=@"test8.dxf";
 			if(fileDXF!="")
 			{
 				this.Content = myDXF.GetMainGrid(fileDXF,true,true);
-				DrawUtils.SaveAsPng(DrawUtils.GetImage(myDXF.mainCanvas));
+				//DrawUtils.SaveAsPng(DrawUtils.GetImage(myDXF.mainCanvas));
 					
 			}
 			else
@@ -200,10 +200,10 @@ namespace NetDXFViewer
 			}
 			
 			//myDXF.border.ZoomAuto(5000,5000,((Grid)Application.Current.MainWindow.Content).ActualHeight,((Grid)Application.Current.MainWindow.Content).ActualWidth);
-			myDXF.border.ZoomAuto(5000,5000,win1.myDXF.WinHeight,win1.myDXF.WinWidth);
+			myDXF.border.ZoomAuto(5000,5000,mainWin.myDXF.WinHeight,mainWin.myDXF.WinWidth);
 			//DrawUtils.DrawPoint(100,0,myDXF.mainCanvas,Colors.Red,25,1);
 			//DrawUtils.DrawPoint(-225,0,myDXF.mainCanvas,Colors.Red,25,1);
-			DrawUtils.SaveAsPng(DrawUtils.GetImage(myDXF.mainCanvas));
+			//DrawUtils.SaveAsPng(DrawUtils.GetImage(myDXF.mainCanvas));
 
 		}
 		

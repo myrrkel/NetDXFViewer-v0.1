@@ -215,9 +215,10 @@ namespace NetDXFViewer
 			List<int> list = new List<int> {2,5,8}; /*Center*/
 			if (list.Contains((int)Attach))
 			{
-				newPos.X = newPos.X  -Math.Cos(Deg2Rad(angle))*width/2   -Math.Sin(Deg2Rad(angle))*(height+height/2 +1);
+				newPos.X = newPos.X - width/2 -Math.Sin(Deg2Rad(angle))*(height/2 -6) ;
+				//newPos.X = newPos.X  -Math.Cos(Deg2Rad(angle))*width/2   -Math.Sin(Deg2Rad(angle))*(height+height/2 +1);
 				//newPos.X = newPos.X - height  -Math.Cos(Deg2Rad(angle))*width/2   -Math.Sin(Deg2Rad(angle))*(height/2 +1);
-				//newPos.X = newPos.X -Math.Sin(Deg2Rad(90))*width/2 -Math.Cos(Deg2Rad(90))*height/2;
+				//newPos.X = newPos.X -Math.Sin(Deg2Rad(angle))*width/2 -Math.Cos(Deg2Rad(angle))*height/2;
 			}
 			
 			list = new List<int> {1,4,7}; /*Left*/

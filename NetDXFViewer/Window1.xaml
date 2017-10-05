@@ -1,68 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <Window
 	x:Class="NetDXFViewer.Window1" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:NetDXFViewer"
 	Title="NetDXFViewer"
 	Height="700"
 	Width="500"
-	Name="win1"
+	Name="mainWin"
 	WindowStyle="SingleBorderWindow">
-	<Grid
-		Name="grid1"
-		HorizontalAlignment="Stretch"
-		VerticalAlignment="Stretch">
-		<local:ZoomBorder
-			x:Name="border1"
-			ClipToBounds="True"
-			Background="Red"
-			Height="10000"
-			Width="10000">
-			<Canvas
-				Name="canvas0"
-				Opacity="1"
-				HorizontalAlignment="Stretch"
-				VerticalAlignment="Stretch">
-				<Canvas.Background>
-					<DrawingBrush
-						x:Name="gridBackgroundBrush"
-						Viewport="0,0,10,10"
-						ViewportUnits="Absolute"
-						TileMode="Tile">
-						<DrawingBrush.Drawing>
-							<DrawingGroup>
-								<DrawingGroup.Children>
-									<GeometryDrawing
-										Geometry="M0,0 L1,0 1,0.01, 0,0.01Z"
-										Brush="#3A4053" />
-									<GeometryDrawing
-										Geometry="M0,0 L0,1 0.01,1, 0.01,0Z"
-										Brush="#3A4053" />
-								</DrawingGroup.Children>
-							</DrawingGroup>
-						</DrawingBrush.Drawing>
-					</DrawingBrush>
-				</Canvas.Background>
+	<DockPanel
+		Name="dockPanel"
+		VerticalAlignment="Top">
+		<Menu
+			DockPanel.Dock="Top"
+			x:Name="test"
+			Height="23">
+			<MenuItem Header="_File">
+				<MenuItem Header="_Open"/>
+				<MenuItem Header="_Close"/>
+				<MenuItem Header="_Save"/>
+			</MenuItem>
+		</Menu>
+		<Grid
+			Name="grid1"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch">
+			<local:ZoomBorder
+				x:Name="border1"
+				ClipToBounds="True"
+				Background="Red"
+				Height="10000"
+				Width="10000">
 				<Canvas
-					Name="canvas1"
-					Opacity="1"></Canvas>
-			</Canvas>
-		</local:ZoomBorder>
-		<StackPanel>
-			<Button
-				x:Name="ResetButton"
-				Click="ResetButton_Click"
-				Content="Reset"
-				Width="100"
-				Margin="10"
-				VerticalAlignment="Top"
-				HorizontalAlignment="Left" />
-			<Button
-				x:Name="RedrawButton"
-				Click="DrawDXF_Click"
-				Content="Redraw"
-				Width="100"
-				Margin="10"
-				VerticalAlignment="Top"
-				HorizontalAlignment="Left" />
-		</StackPanel>
-	</Grid>
+					Name="canvas0"
+					Opacity="1"
+					HorizontalAlignment="Stretch"
+					VerticalAlignment="Stretch">
+					<Canvas.Background>
+						<DrawingBrush
+							x:Name="gridBackgroundBrush"
+							Viewport="0,0,10,10"
+							ViewportUnits="Absolute"
+							TileMode="Tile">
+							<DrawingBrush.Drawing>
+								<DrawingGroup>
+									<DrawingGroup.Children>
+										<GeometryDrawing
+											Geometry="M0,0 L1,0 1,0.01, 0,0.01Z"
+											Brush="#3A4053" />
+										<GeometryDrawing
+											Geometry="M0,0 L0,1 0.01,1, 0.01,0Z"
+											Brush="#3A4053" />
+									</DrawingGroup.Children>
+								</DrawingGroup>
+							</DrawingBrush.Drawing>
+						</DrawingBrush>
+					</Canvas.Background>
+					<Canvas
+						Name="canvas1"
+						Opacity="1"></Canvas>
+				</Canvas>
+			</local:ZoomBorder>
+			<StackPanel>
+				<Button
+					x:Name="ResetButton"
+					Click="ResetButton_Click"
+					Content="Reset"
+					Width="100"
+					Margin="10"
+					VerticalAlignment="Top"
+					HorizontalAlignment="Left" />
+				<Button
+					x:Name="RedrawButton"
+					Click="DrawDXF_Click"
+					Content="Redraw"
+					Width="100"
+					Margin="10"
+					VerticalAlignment="Top"
+					HorizontalAlignment="Left" />
+			</StackPanel>
+		</Grid>
+	</DockPanel>
 </Window>
